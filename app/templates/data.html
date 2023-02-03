@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block title %}Django with Data Catalog + BiqQuery Demo{% endblock %}
+
+{% block content %}
+    {% for table in tables %}
+        <br/>
+        <div class="card">
+            <div class="card-body">
+                <div class="text-center fs-6 font-monospace">{{ table.table_project_id }}.{{ table.table_dataset_id }}.{{ table.table_id }}</div>
+                <br/>
+                {% for tag in table.tags %}
+                    <p>Template Tag: {{ tag.display_name }}</p>
+                    <ul class="list-group">
+                        {% for field in tag.fields %}
+                            <li class="list-group-item">{{ field }}</li>
+                        {% endfor %}
+                    </ul>
+                    <br/>
+                {% endfor %}
+                <table class="table table-sm table-striped">
+                    <tr>
+                        {% for col in table.data.columns %}
+                            <th scope="col">
+                                {{col}}
+                            </th>
+                        {% endfor %}
+                    </tr>
+                    {% for index, row in table.data.iterrows %}
+                        <tr>
+                            {% for cell in row %}
+                                <td>
+                                    {{cell}}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
